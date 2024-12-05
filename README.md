@@ -42,21 +42,23 @@ Enter the location you want to insert the node to: 1
 Enter the data you want to remove from the list: 5
 10->NULL
 ```
+
 ## Memory Management
+
 The program automatically frees all allocated memory when exiting, preventing memory leaks. Each node is properly deallocated when removed from the list.
 
 ## Error Handling
+
 - Validates all numeric inputs
 - Handles malloc failures
 - Checks for invalid list positions during insertion
 - Provides feedback for unsuccessful operations
 
 ## Building and Running
+
 Compile using a C compiler:
 
 ```gcc -o linked_list linked_list.c```
-
-
 
 Run the executable:
 
