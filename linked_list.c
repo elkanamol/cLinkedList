@@ -7,12 +7,26 @@
 #define MENU_PRINT 4
 #define MENU_QUIT 5
 
-typedef struct{
+typedef struct Node Node;
+
+struct Node{
     int data;
-    void* next;
-} Node;
+    Node *next;
+};
 
 Node* head = NULL;
+
+int safeReadInt(int *value)
+{
+    if (scanf("%d", value) != 1)
+    {
+        while (getchar() != '\n')
+            ; // Clear input buffer
+        printf("Invalid input. Please enter a number.\n");
+        return 0;
+    }
+    return 1;
+}
 
 /**
  * Prints the contents of the linked list.
@@ -162,46 +176,50 @@ int main(int argc, char** argv)
     int option = -1;
     int arg1 = 0 ;
     int arg2 = 0;
-    while(option != 5){
+    Node *new_node = NULL;
+    while (option != 5)
+    {
         printMenu();
-        int num_recived = scanf("%d", &option);
-        if(num_recived == 1 && option > 0 && option <= 5){
-
-            switch(option){
-                case MENU_ADD:
-                    // add a node to the list
-                    printf("Enter the data you want to add to the list: ");
-                    scanf("%d", &arg1);
-                    Node* new_node = addNode(arg1);
-                    break;
-                case MENU_REMOVE:
-                    // remove a node from the list
-                    printf("Enter the data you want to remove from the list: ");
-                    scanf("%d", &arg1);
-                    int sucsses = removeNode(arg1);
-                    if(!sucsses){
-                        printf("The node you are trying to remove does not exist in the list.\n");
-                    }
-                    break;
-                case MENU_INSERT: 
-            // insert a node to the list
-                    printf("Enter the data you want to insert to the list: ");
-                    scanf("%d", &arg1);
-                    printf("Enter the loaction you want to insert the node to: ");
-                    scanf("%d", &arg2);
-                    new_node = insertNode(arg1, arg2);
-                    if (new_node == NULL){
-                        printf("Failed to insert into list\n");
-                    }
-                    break;
-                case MENU_PRINT:
-                // print the list
-                    printList();
-                    break;
-                case MENU_QUIT:
-                    break;
-                // default:
-                //     break;
+        if (safeReadInt(&option)) {
+            if (option > 0 && option <= 5) {
+                switch(option) {
+                    case MENU_ADD:
+                        // add a node to the list
+                        printf("Enter the data you want to add to the list: ");
+                        if (safeReadInt(&arg1)) {
+                            new_node = addNode(arg1);
+                        }
+                        break;
+                    case MENU_REMOVE:
+                        // remove a node from the list
+                        printf("Enter the data you want to remove from the list: ");
+                        if (safeReadInt(&arg1)) {
+                            int sucsses = removeNode(arg1);
+                            if(!sucsses) {
+                                printf("The node you are trying to remove does not exist in the list.\n");
+                            }
+                        }
+                        break;
+                    case MENU_INSERT:
+                        // insert a node to the list
+                        printf("Enter the data you want to insert to the list: ");
+                        if (safeReadInt(&arg1)) {
+                            printf("Enter the location you want to insert the node to: ");
+                            if (safeReadInt(&arg2)) {
+                                new_node = insertNode(arg1, arg2);
+                                if (new_node == NULL) {
+                                    printf("Failed to insert into list\n");
+                                }
+                            }
+                        }
+                        break;
+                    case MENU_PRINT:
+                        // print the list
+                        printList();
+                        break;
+                    case MENU_QUIT:
+                        break;
+                }
             }
         }
     }
@@ -213,3 +231,5 @@ int main(int argc, char** argv)
     }
     return 0;
 }
+
+
